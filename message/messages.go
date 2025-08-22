@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-func GetInvalidRuleIdError(ruleId string) string {
-	return fmt.Sprintf("Invalid rule ID: %s\n", ruleId)
+func GetInvalidRuleIdWarning(ruleId string) string {
+	return fmt.Sprintf("Warning: Invalid rule ID %s\n", ruleId)
 }
 
 func GetMissingFileOrFolderError() string {
