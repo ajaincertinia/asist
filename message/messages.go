@@ -4,8 +4,22 @@ import (
 	"fmt"
 )
 
+var TextColor = struct {
+	Error string
+	Info  string
+	Warn  string
+	Debug string
+	Reset string
+}{
+	Error: "\033[0;31m",
+	Info:  "\033[0;32m",
+	Warn:  "\033[0;33m",
+	Debug: "\033[0;34m",
+	Reset: "\033[0m",
+}
+
 func GetInvalidRuleIdWarning(ruleId string) string {
-	return fmt.Sprintf("Warning: Invalid rule ID %s\n", ruleId)
+	return fmt.Sprintf(TextColor.Warn+"Warning "+TextColor.Reset+"Invalid rule ID %s\n", ruleId+TextColor.Reset)
 }
 
 func GetMissingFileOrFolderError() string {
