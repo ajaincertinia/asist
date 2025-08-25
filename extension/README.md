@@ -56,7 +56,7 @@ This extension is shipped with prebuilt ASIST binaries, but if you need to speci
 
 Refer [DEVELOPING.md](https://github.com/certinia/asist/blob/main/DEVELOPING.md)
 
-## ❤️ Contributors
+# Contributors
 
 A big thank you to everyone who has contributed to ASIST!
 
