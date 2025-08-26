@@ -23,18 +23,6 @@ func GetMissingFileOrFolderError() string {
 	return "Specify a file or folder path to scan\n"
 }
 
-func GetCreatingIgnoreListInstanceError(err error) string {
-	return fmt.Sprintf("Error while creating instance for ignore list %v", err)
-}
-
-func GetReadingCurrentWorkDirectoryError(pathErr error) string {
-	return fmt.Sprintf("Error while reading current work directory: %v", pathErr)
-}
-
-func GetIgnoreFilesWalkError(ignoreFilesWalkError error) string {
-	return fmt.Sprintf("Error while scanning for ignore files %v", ignoreFilesWalkError)
-}
-
 func GetPathFetchingError(err error) string {
 	return fmt.Sprintf("Error fetching path: %+v\n", err)
 }
