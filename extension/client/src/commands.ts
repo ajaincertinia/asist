@@ -38,7 +38,6 @@ export function listRulesCommand(client: LanguageClient): Disposable {
 				client.diagnostics.clear();
 				outputChannel.append(errorMessage);
 				window.showErrorMessage(errorMessage);
-				return;
 			}
 			outputChannel.append(stdout);
 		});
@@ -98,7 +97,6 @@ function displayOutputAndClearRequest(
 		client.diagnostics.clear();
 		outputChannel.append(errorMessage);
 		window.showErrorMessage(errorMessage);
-		return;
 	}
 	outputChannel.append(stdout);
 	client.diagnostics.clear();
