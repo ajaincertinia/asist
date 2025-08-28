@@ -13,7 +13,7 @@ var TextColor = map[string]string{
 }
 
 func SetLogType(logType string, msg string) string {
-	return TextColor[logType] + logType + TextColor["Reset"] + " " + msg
+	return TextColor[logType] + logType + TextColor["Reset"] + ": " + msg
 }
 func GetInvalidRuleIdWarning(ruleId string) string {
 	return SetLogType("Warning", fmt.Sprintf("Invalid rule ID %s\n", ruleId))
