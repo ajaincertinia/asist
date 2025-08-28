@@ -3,8 +3,8 @@ name: Publish ASIST
 on:
   push:
     tags:
-       - 'v*.*.*'
-       - 'v*.*.*-vsce'
+      - 'v*.*.*'
+      - 'v*.*.*-vsce'
 
 
 jobs:
