@@ -33,6 +33,9 @@ export function listRulesCommand(client: LanguageClient): Disposable {
 				? [OPTIONS.LIST_RULES]
 				: [OPTIONS.CONFIG, configFile, OPTIONS.LIST_RULES];
 		execFile(getScannerPath(), cmdOptions, function callback(error, stdout, stderr) {
+			if (error?.message) {
+				error.message = "Error: " + error?.message;
+			}
 			const errorMessage = stderr ? stderr : error?.message;
 			if (errorMessage) {
 				client.diagnostics.clear();
@@ -92,6 +95,9 @@ function displayOutputAndClearRequest(
 	stderr: string,
 	client: LanguageClient
 ) {
+	if (error?.message) {
+		error.message = "Error: " + error?.message;
+	}
 	const errorMessage = stderr ? stderr : error?.message;
 	if (errorMessage) {
 		client.diagnostics.clear();
