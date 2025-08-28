@@ -148,6 +148,5 @@ A big thank you to everyone who has contributed to ASIST!
         <sub><b>Matthew</b></sub>
       </a>
     </td>
-    
   </tr>
 </table>
