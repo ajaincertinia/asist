@@ -55,18 +55,18 @@ jobs:
       - name: Build Binaries
         run: make build-binaries
 
-      - name: Create GitHub Release and upload binaries
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "$VERSION" \
-            --title="Release $VERSION" \
-            --notes-file=.github/release-notes.md \
-            asist.exe \
-            asist_darwin_amd64 \
-            asist_darwin_arm64 \
-            asist_linux_amd64 \
-            asist_linux_arm64
+#     - name: Create GitHub Release and upload binaries
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       run: |
+#         gh release create "$VERSION" \
+#           --title="Release $VERSION" \
+#           --notes-file=.github/release-notes.md \
+#           asist.exe \
+#           asist_darwin_amd64 \
+#           asist_darwin_arm64 \
+#           asist_linux_amd64 \
+#           asist_linux_arm64
 
 
   publish-extension:
@@ -80,6 +80,16 @@ jobs:
     needs: [check-tag, release-binary]
     runs-on: ubuntu-latest
     steps:
+      - name: Strip leading 'v' from tag
+        run: |
+          TAG="${{ needs.check-tag.outputs.tag_number }}"
+          if [[ "$TAG" == v* ]]; then
+            VERSION="${TAG:1}" # remove first character i.e. v
+          else
+            VERSION="$TAG"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -89,35 +99,36 @@ jobs:
           node-version: '22.12.0'
           cache: 'npm'
 
-      - name: Install vsce globally
-        run: npm install -g @vscode/vsce
+#      - name: Install vsce globally
+#        run: npm install -g @vscode/vsce
 
-      - name: Download latest released binaries
-        run: |
-          tagNumber="$(curl https://api.github.com/repos/${{ github.repository }}/releases/latest -s | jq .tag_name -r)"
-          echo "Tag Number: $tagNumber"
-          baseUrl="https://github.com/${{ github.repository }}/releases/download/$tagNumber"
-          urls=("$baseUrl/asist.exe" "$baseUrl/asist_darwin_amd64" "$baseUrl/asist_darwin_arm64" "$baseUrl/asist_linux_amd64" "$baseUrl/asist_linux_arm64")
-
-          mkdir -p binaries
-          for url in "${urls[@]}"; do
-              echo "⬇️ Downloading $url"
-              curl -L -o "binaries/$(basename "$url")" "$url"
-          done
-
-      - name: Move binaries to extension directory and set execute permissions
-        run: |
-          chmod +x ./binaries/*
-          cp ./binaries/* ./extension
-
+#      - name: Download latest released binaries
+#        run: |
+#          tagNumber="$(curl https://api.github.com/repos/${{ github.repository }}/releases/latest -s | jq .tag_name -r)"
+#          echo "Tag Number: $tagNumber"
+#          baseUrl="https://github.com/${{ github.repository }}/releases/download/$tagNumber"
+#          urls=("$baseUrl/asist.exe" "$baseUrl/asist_darwin_amd64" "$baseUrl/asist_darwin_arm64" "$baseUrl/asist_linux_amd64" "$baseUrl/asist_linux_arm64")
+#
+#          mkdir -p binaries
+#          for url in "${urls[@]}"; do
+#              echo "⬇️ Downloading $url"
+#              curl -L -o "binaries/$(basename "$url")" "$url"
+#          done
+#
+#      - name: Move binaries to extension directory and set execute permissions
+#        run: |
+#          chmod +x ./binaries/*
+#          cp ./binaries/* ./extension
+#
       - name: Build vsix package
-        run: make build-vscode-extension-binary-exist
+        run: make build-vscode-extension-prepublish
 
       - name: Publish to VS Code Marketplace and Open VSX
         run: |
           cd extension
           echo "Verify vsce token has not expired"
-          vsce verify-pat -p ${{ secrets.VSCE_TOKEN }}
+#          vsce verify-pat -p ${{ secrets.VSCE_TOKEN }}
 
           echo "Publish to vsce"
-          vsce publish --packagePath asist-${{ needs.check-tag.outputs.tag_number }}.vsix -p ${{ secrets.VSCE_TOKEN }}
+#         vsce publish --packagePath asist-"$VERSION".vsix -p ${{ secrets.VSCE_TOKEN }}
+          ls extension/asist-"$VERSION".vsix
