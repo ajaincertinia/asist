@@ -208,7 +208,7 @@ func TestGetRuleIdsToRun_OptionsAllDisabledAndConfigFileNil_returnAllStandardRul
 	}
 }
 
-func TestGetRuleIdsToRun_SpecificRuleHasInvalidRuleId_returnsInvalidRuleId(t *testing.T) {
+func TestGetRuleIdsToRun_SpecificRuleHasInvalidRuleId_ReturnsInvalidRuleId(t *testing.T) {
 	//Given
 	opts := options.Options{
 		Rules: "InvalidId",
@@ -230,7 +230,7 @@ func TestGetRuleIdsToRun_SpecificRuleHasInvalidRuleId_returnsInvalidRuleId(t *te
 	}
 }
 
-func TestGetRuleIdsToRun_OverrideRuleHasInvalidRuleId_returnAllStandardRuleIds(t *testing.T) {
+func TestGetRuleIdsToRun_OverrideRuleHasInvalidRuleId_ReturnsAllStandardRuleIds(t *testing.T) {
 	//Given
 	opts := options.Options{}
 
@@ -331,7 +331,7 @@ func TestCreateRules_WhenStandardRules_ReturnOverridedRules(t *testing.T) {
 	}
 }
 
-func TestCreateRules_WhenStandardRuleIdInvalid_returnsNoRules(t *testing.T) {
+func TestCreateRules_WhenStandardRuleIdInvalid_ReturnsNoRules(t *testing.T) {
 	//Given
 	invalidRuleId := rules.RuleID("xyz")
 	standardRuleIds := []rules.RuleID{invalidRuleId}
