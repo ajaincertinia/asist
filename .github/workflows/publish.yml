@@ -87,10 +87,10 @@ jobs:
       - name: Copy binary into extension
         run: |
           cp ./asist.exe ./extension/asist.exe
-	        cp ./asist_darwin_amd64 ./extension/asist_darwin_amd64
-	        cp ./asist_darwin_arm64 ./extension/asist_darwin_arm64
-	        cp ./asist_linux_amd64 ./extension/asist_linux_amd64
-	        cp ./asist_linux_arm64 ./extension/asist_linux_arm64
+          cp ./asist_darwin_amd64 ./extension/asist_darwin_amd64
+          cp ./asist_darwin_arm64 ./extension/asist_darwin_arm64
+          cp ./asist_linux_amd64 ./extension/asist_linux_amd64
+          cp ./asist_linux_arm64 ./extension/asist_linux_arm64
 
       - name: Build vsix package
         run: make build-vscode-extension-binary-exist
