@@ -1,0 +1,438 @@
+<link rel="stylesheet" href="./style.css">
+<div data-align="center">
+<p><img height="200px" src="images/logo.svg"></img></p>
+</div>
+<h1 id="asist-automated-security-issue-scanning-tool">ASIST (Automated
+Security Issue Scanning Tool)</h1>
+<p><a href="https://pkg.go.dev/github.com/certinia/asist"><img
+src="https://pkg.go.dev/badge/github.com/certinia/asist.svg"
+alt="Go Reference" /></a> <a
+href="https://opensource.org/license/bsd-3-clause"><img
+src="https://img.shields.io/badge/license-BSD--3--Clause-blue"
+alt="License: BSD-3-Clause" /></a></p>
+<p>ASIST is a regex-based, blazing-fast Static Application Security
+Testing (SAST) tool for securing Salesforce apps at developer speed.</p>
+<p>Originally built for internal use at Certinia to support Security
+Reviews, we have now decided to release it to the community 🌍</p>
+<h2 id="features">⭐ Features</h2>
+<ul>
+<li>⚡ Fast! Scan a single file in tens of milliseconds, and under a
+minute to scan a project with 2.5M lines of Apex code</li>
+<li>👾 32 rules covering XSS, Sharing clauses, hardcoded secrets, and
+some more obscure pitfalls, all aligned with Salesforce security best
+practices</li>
+<li>🖋️ Supports custom regex rules in config and standard rule
+overrides</li>
+<li>✅ False positive management with comments or annotations</li>
+<li>⚙️ VSCode extension for scanning as you code! See the <a
+href="extension/README.md">extension README</a> for more details</li>
+<li>💻 Multi-platform, multi-architecture (tested on Mac Intel, Mac
+Silicon, Windows, and Linux)</li>
+<li>🚫 Respects .gitignore and .forceignore by default</li>
+<li>🧩 YAML or JSON config, and JSON output for programmatic processing
+😎</li>
+<li>🏗️ CI/CD-ready without the disruption</li>
+<li>📈 Baseline scan mode for generating metrics</li>
+</ul>
+<h2 id="vscode-extension-demo">▶️ VSCode extension demo</h2>
+<figure>
+<img src="images/scan-using-extension.gif"
+alt="ASIST scan via Extension" />
+<figcaption aria-hidden="true">ASIST scan via Extension</figcaption>
+</figure>
+<h2 id="cli-demo">▶️ CLI demo</h2>
+<figure>
+<img src="images/scan-using-cli.gif" alt="ASIST scan via CLI" />
+<figcaption aria-hidden="true">ASIST scan via CLI</figcaption>
+</figure>
+<h2 id="installing">📥 Installing</h2>
+<h3 id="precompiled-releases">Precompiled releases</h3>
+<ol type="1">
+<li>Download the binary of your choice from <a
+href="https://github.com/certinia/asist/releases">releases</a>.</li>
+<li>Place the binary somewhere in your PATH</li>
+</ol>
+<h3 id="as-a-go-package">As a Go package</h3>
+<ol type="1">
+<li>Run <code>go install github.com/certinia/asist</code></li>
+</ol>
+<h3 id="installing-the-vscode-extension">Installing the VSCode
+extension</h3>
+<p>Search for ASIST on the VSCode marketplace.</p>
+<p>See <a href="extension">extensions</a> for usage</p>
+<h3 id="build-from-source">Build from source</h3>
+<ol type="1">
+<li>Install <code>go</code> and <code>make</code></li>
+<li>Clone this repo</li>
+<li>Install into your GOPATH: <code>make install</code></li>
+</ol>
+<p>Alternatively:</p>
+<ul>
+<li>To just build the binary for your OS and architecture:
+<code>make</code></li>
+<li>To cross-compile:
+<code>GOOS=windows GOARCH=amd64 go build -o asist.exe .</code></li>
+<li>To build binaries for the most common platforms, run:
+<code>make build-binaries</code></li>
+</ul>
+<h2 id="usage">🕹️ Usage</h2>
+<p>To see the help, run: <code>asist -h</code></p>
+<pre class="text"><code>Usage:
+  asist [OPTIONS] [Path]
+
+Application Options:
+  -u, --repo-url=      URL of the repo. Used for baseline scan output
+  -c, --config=        JSON or YAML config file to read from
+  -r, --rules=         Rules comma separated to run (ignore rules enabled/disabled in config)
+  -l, --list-rules     List rules which would be run
+  -b, --baseline-scan  For getting output of ASIST baseline scan as count of occurrences and false positive occurrences, number of custom rules occurrences, type of record and this data is used for creating
+                       metrics.
+  -j, --cicd-rules     For use in CI/CD pipelines. Tells ASIST to only run the CICD rules defined in config file. If there are no CI/CD rules defined, no rules will be executed. If there are any occurrences, returns
+                       a non-zero exit code which will make the pipeline step fail
+  -v, --verbose        Print out debug messages with time elapsed since last message
+  -V, --version        Display the current version of ASIST binary
+
+Help Options:
+  -h, --help           Show this help message
+
+Arguments:
+  Path:                Path to the file or folder to scan</code></pre>
+<h3 id="examples">🧩 Examples</h3>
+<p>Recursively scan the current working directory with default settings
+(all rules):</p>
+<pre class="shell"><code>asist .</code></pre>
+<p>This scan produces the following output, indicating the total number
+of issues identified, the start and end timestamps, and the detailed
+findings:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;Count&quot;</span><span class="fu">:</span> <span class="dv">161</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;Started&quot;</span><span class="fu">:</span> <span class="st">&quot;2025-07-23 13:12:08.231779 +0200 CEST m=+0.000501126&quot;</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;Ended&quot;</span><span class="fu">:</span> <span class="st">&quot;2025-07-23 13:12:08.307712 +0200 CEST m=+0.076432459&quot;</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;Result&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;ID&quot;</span><span class="fu">:</span> <span class="st">&quot;ApexClassNoSharing&quot;</span><span class="fu">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Apex Class No Sharing&quot;</span><span class="fu">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Description&quot;</span><span class="fu">:</span> <span class="st">&quot;Use of Apex classes where the sharing clause is not specified may cause confusion for other developers. Always set the most restrictive sharing clause for each class.&quot;</span><span class="fu">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Severity&quot;</span><span class="fu">:</span> <span class="st">&quot;Medium&quot;</span><span class="fu">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;RuleCategory&quot;</span><span class="fu">:</span> <span class="st">&quot;Security&quot;</span><span class="fu">,</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Occurrence&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;File&quot;</span><span class="fu">:</span> <span class="st">&quot;/Users/shaundoyle/sandbox/product/asist/files/testData/testFile.cls&quot;</span><span class="fu">,</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Line&quot;</span><span class="fu">:</span> <span class="st">&quot;Class TestFile {&quot;</span><span class="fu">,</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;LineNumber&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ColumnRange&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>     <span class="dv">0</span><span class="ot">,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>     <span class="dv">14</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>   <span class="fu">}</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;ID&quot;</span><span class="fu">:</span> <span class="st">&quot;XSSFormAction&quot;</span><span class="fu">,</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Name&quot;</span><span class="fu">:</span> <span class="st">&quot;Potential XSS with formaction in JS context&quot;</span><span class="fu">,</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Description&quot;</span><span class="fu">:</span> <span class="st">&quot;Use of the formaction attribute in JavaScript context may introduce an XSS issue. Consider removing it, otherwise ensure that no user input is rendered unescaped.&quot;</span><span class="fu">,</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Severity&quot;</span><span class="fu">:</span> <span class="st">&quot;High&quot;</span><span class="fu">,</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;RuleCategory&quot;</span><span class="fu">:</span> <span class="st">&quot;Security&quot;</span><span class="fu">,</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Occurrence&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;File&quot;</span><span class="fu">:</span> <span class="st">&quot;/Users/shaundoyle/sandbox/product/asist/integrationtests/src/aura/aura.cmp&quot;</span><span class="fu">,</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;Line&quot;</span><span class="fu">:</span> <span class="st">&quot;    </span><span class="ch">\u003c</span><span class="st">form id=</span><span class="ch">\&quot;</span><span class="st">test</span><span class="ch">\&quot;\u003e\u003c</span><span class="st">/form</span><span class="ch">\u003e\u003c</span><span class="st">button form=</span><span class="ch">\&quot;</span><span class="st">test</span><span class="ch">\&quot;</span><span class="st"> formaction=</span><span class="ch">\&quot;</span><span class="st">javascript:alert(1)</span><span class="ch">\&quot;\u003e</span><span class="st">X</span><span class="ch">\u003c</span><span class="st">/button</span><span class="ch">\u003e</span><span class="st">&quot;</span><span class="fu">,</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;LineNumber&quot;</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ColumnRange&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>     <span class="dv">47</span><span class="ot">,</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>     <span class="dv">70</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>   <span class="fu">}</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="ot">[</span><span class="er">...</span><span class="ot">]</span></span></code></pre></div>
+<p>Scan a single file with default settings:</p>
+<pre class="shell"><code>asist force-app/main/default/classes/MyClass.cls</code></pre>
+<p>Print the ASIST version</p>
+<pre class="shell"><code>asist -V</code></pre>
+<p>Scan a file with your config:</p>
+<pre class="shell"><code>asist -c ./.asist.json force-app/main/default/classes/MyClass.cls</code></pre>
+<p>Scan with a single rule:</p>
+<pre class="shell"><code>/asist -r ApexClassNoSharing .</code></pre>
+<p>Just list enabled rules, but don’t scan:</p>
+<pre class="shell"><code>asist -l
+asist -c .asist.yaml -l # Does not list rules disabled in your config</code></pre>
+<p>Run in verbose mode (for debugging):</p>
+<pre class="shell"><code>asist -v .</code></pre>
+<p>Run in CI/CD mode (will only run rules added to
+<code>cicdrules</code> if this property is defined):</p>
+<pre class="shell"><code>asist -j .</code></pre>
+<p>Run in baseline mode:</p>
+<pre class="shell"><code>asist -b -u &quot;https://github.com/certinia/asist.git&quot; .</code></pre>
+<h2 id="configuration">⚙️ Configuration</h2>
+<p>Most of the configuration required for your project will be defined
+in a configuration file.</p>
+<p>ASIST supports YAML or JSON config files.</p>
+<p>When scanning a folder, ASIST will automatically detect either
+<code>.asist.yaml</code> or <code>.asist.json</code> from the top-level
+folder being scanned.</p>
+<p>Configuration files can also be explicitly specified using the
+<code>-c</code> argument (note that this is required when scanning a
+single file).</p>
+<p>Within the config file, you can:</p>
+<ul>
+<li>Enable/disable all the standard rules<br />
+</li>
+<li>Override certain properties of standard rules</li>
+<li>Exclude files or directories for all rules</li>
+<li>Exclude files or directories for specific rules</li>
+<li>Add custom regex rules</li>
+<li>Define rules to be run in CI/CD mode</li>
+</ul>
+<p>See our <a href=".asist.example.yaml">example config file</a> for a
+walkthrough of all config options.</p>
+<h3 id="customizing-standard-rules">🔧 Customizing Standard rules</h3>
+<p>Users can override certain properties of standard rules according to
+their needs, allowing them to customize the behavior of specific rules
+by:</p>
+<ul>
+<li>Disabling rules entirely: <code>enabled</code></li>
+<li>Tweaking rule severity: <code>severity</code></li>
+<li>Tweaking what files should be scanned:
+<code>includepattern</code></li>
+<li>Tweaking what files should not be scanned:
+<code>excludepattern</code></li>
+</ul>
+<h3 id="creating-custom-rules">✍🏼 Creating Custom Rules</h3>
+<p>In addition to customizing standard rules, users can also create
+custom rules to define their own regex pattern:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">customregexrules</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">NoDebugStatements</span><span class="kw">:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> doNotDebug</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Debug statements anticipate bugs; avoid bugs instead&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">enabled</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">severity</span><span class="kw">:</span><span class="at"> Critical</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">rulecategory</span><span class="kw">:</span><span class="at"> Security</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">pattern</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;System</span><span class="sc">\\</span><span class="st">.debug</span><span class="sc">\\</span><span class="st">(&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">includepattern</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;</span><span class="sc">\\</span><span class="st">.cls$&quot;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">excludepattern</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Test</span><span class="sc">\\</span><span class="st">.cls$&quot;</span></span></code></pre></div>
+<p>You can test this specific rule like this:</p>
+<pre class="shell"><code>asist -c .asist.yaml -r doNotDebug &lt;file&gt;</code></pre>
+<h2 id="false-positive-management">❌ False positive management</h2>
+<p>ASIST provides the ability to mark false positives with annotations,
+comments, or any other places where arbitrary text can be specified.</p>
+<p>In the example below, the <code>SessionIDApex</code> rule is ignored
+for the statement:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// asist-ignore-begin:[SessionIDApex]</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ID sid <span class="op">=</span> UserInfo<span class="op">.</span><span class="fu">getSessionID</span><span class="op">();</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">// asist-ignore-end</span></span></code></pre></div>
+<p>Various rule IDs may be comma-separated to ignore multiple rules for
+a particular block of code, and comments with justifications can be set
+after the <code>asist-ignore-begin</code> statement:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode java"><code class="sourceCode java"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// asist-ignore-begin:[SessionIDApex,InsecureCryptoAlgorithm] This code is for testing, and not part of the package</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ID sid <span class="op">=</span> UserInfo<span class="op">.</span><span class="fu">getSessionID</span><span class="op">();</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Blob</span> sidBlob <span class="op">=</span> <span class="bu">Blob</span><span class="op">.</span><span class="fu">valueOf</span><span class="op">(</span>sid<span class="op">);</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">Blob</span> hash <span class="op">=</span> Crypto<span class="op">.</span><span class="fu">generateDigest</span><span class="op">(</span><span class="er">&#39;</span>MD5<span class="er">&#39;</span><span class="op">,</span> sidBlob<span class="op">);</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">[</span><span class="kw">...</span><span class="op">]</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">// asist-ignore-end</span></span></code></pre></div>
+<p>In markup languages, comments should be set in
+<code>&lt;!-- comments --&gt;</code> when possible.</p>
+<p>In any other file types, the user must figure out the more
+appropriate way to insert the <code>asist-ignore-begin</code> and
+<code>asist-ignore-end</code> statements. Technically, it doesn’t matter
+where you put them!</p>
+<p><em><strong>Note</strong>: Nested false positive tags are not
+supported.</em></p>
+<h3 id="using-the-extension-to-mark-false-positives">🔌 Using the
+Extension to mark false positives</h3>
+<p>While using ASIST Extension, hover over the occurrence and click on
+<code>Quick fix...</code> option, and select
+<code>Mark False positive</code>:</p>
+<figure>
+<img src="images/marking-false-positives.gif"
+alt="Marking false positive using Extension" />
+<figcaption aria-hidden="true">Marking false positive using
+Extension</figcaption>
+</figure>
+<h1 id="cicd-mode">🔁 CI/CD mode</h1>
+<p>CI/CD mode is enabled using the <code>-j</code> flag:</p>
+<pre class="shell"><code>asist -j .</code></pre>
+<p>In this mode, by default, all enabled runs will be run if
+<code>cicdrules</code> property is not defined, but if the
+<code>cicdrules</code> config property contains any rule IDs, only these
+will be run. And, if <code>cicdrules</code> is defined but is blank (no
+rule is mentioned under this property), then no rules will be
+executed.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cicdrules</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;XSSLabel&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;XSSMergeField&quot;</span></span></code></pre></div>
+<p>This allows developers to add a subset of the overall ruleset to
+ASIST to their CI/CD pipelines, and gradually add more rules to CI/CD as
+they start clearing out findings for other rules. This prevents any
+issues for rules defined in <code>cicdrules</code> from creeping back
+into the codebase.</p>
+<h3 id="baseline-scans">📊 Baseline scans</h3>
+<p>This mode is intended for SecOps teams to create benchmarks across
+multiple projects and measure the adoption of ASIST.</p>
+<p>Some overrides in config, such as severity, will be ignored to
+normalize data for apples-to-apples comparison between different code
+bases, and false positive findings will be included in the output.</p>
+<p>Baseline mode is enabled by means of the <code>-b</code> flag.</p>
+<p>It’s also recommended to specify a repository URL with the
+<code>-u</code> flag:</p>
+<pre class="shell"><code>asist -b -u &quot;git@github.com:certinia/asist.git&quot; .</code></pre>
+<p>This command will output a JSON like this (when formatted):</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;RepositoryName&quot;</span><span class="fu">:</span> <span class="st">&quot;certinia/asist&quot;</span><span class="fu">,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;RepositoryURL&quot;</span><span class="fu">:</span> <span class="st">&quot;git@github.com:certinia/asist.git&quot;</span><span class="fu">,</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;RecordType&quot;</span><span class="fu">:</span> <span class="st">&quot;Finding&quot;</span><span class="fu">,</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Content&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;FindingID&quot;</span><span class="fu">:</span> <span class="st">&quot;b17fe249915712219aca7e&quot;</span><span class="fu">,</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;IsCustom&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;IsFalsePositive&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;RuleID&quot;</span><span class="fu">:</span> <span class="st">&quot;LwcNonStandardPositioning&quot;</span><span class="fu">,</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;Severity&quot;</span><span class="fu">:</span> <span class="st">&quot;Medium&quot;</span><span class="fu">,</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;RuleCategory&quot;</span><span class="fu">:</span> <span class="st">&quot;Security&quot;</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;RepositoryName&quot;</span><span class="fu">:</span> <span class="st">&quot;certinia/asist&quot;</span><span class="fu">,</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;RepositoryURL&quot;</span><span class="fu">:</span> <span class="st">&quot;git@github.com:certinia/asist.git&quot;</span><span class="fu">,</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;RecordType&quot;</span><span class="fu">:</span> <span class="st">&quot;Finding&quot;</span><span class="fu">,</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;Content&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;FindingID&quot;</span><span class="fu">:</span> <span class="st">&quot;3a2861bee641864816b86d&quot;</span><span class="fu">,</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;IsCustom&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;IsFalsePositive&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;RuleID&quot;</span><span class="fu">:</span> <span class="st">&quot;LwcNonStandardPositioning&quot;</span><span class="fu">,</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;Severity&quot;</span><span class="fu">:</span> <span class="st">&quot;Medium&quot;</span><span class="fu">,</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;RuleCategory&quot;</span><span class="fu">:</span> <span class="st">&quot;Security&quot;</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p>A few differences can be observed compared to regular scans:</p>
+<ul>
+<li>Most of the “human-friendly” information is missing (e.g., the code
+location of the finding, the finding description, etc.)</li>
+<li>The repository name and URL will be included so that metrics systems
+can use this as a dimension for filtering.</li>
+<li>Each issue is assigned a <code>FindingID</code>, which is
+effectively a hash that uniquely identifies the finding based on the
+rule, the finding location, and if it’s a false positive or not.</li>
+<li>A few more properties are added, such as if the rule is custom, or
+if the finding is marked as false positive or not.</li>
+</ul>
+<h3 id="gitignore-and-.forceignore-files">🫣 .gitignore and .forceignore
+files</h3>
+<p>By default, ASIST will ignore files and folders defined inside
+.gitignore and .forceignore. If you don’t want ASIST to respect
+.gitignore and .forceignore, you can use the following properties in the
+config file:</p>
+<ul>
+<li><strong>dontgitignore</strong></li>
+<li><strong>dontforceignore</strong></li>
+</ul>
+<h3 id="exit-codes">⍈ Exit Codes</h3>
+<table>
+<thead>
+<tr>
+<th>Exit code</th>
+<th>Exit Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>ASIST executed successfully with no findings</td>
+</tr>
+<tr>
+<td>1</td>
+<td>ASIST executed successfully with findings</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ASIST failed due to internal error (file a bug report!)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ASIST failed due to user error (review input and config)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="contributing">🏗️ <a href="CONTRIBUTING.md">CONTRIBUTING</a></h2>
+<h2 id="license">🎫 <a href="LICENSE.txt">LICENSE</a></h2>
+<h2 id="contributors">❤️ Contributors</h2>
+<p>A big thank you to everyone who has contributed to ASIST!</p>
+<table>
+<tr>
+<td align="center">
+<a href="https://github.com/sdoylecertinia">
+<img src="https://avatars.githubusercontent.com/sdoylecertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="sdoylecertinia"/><br />
+<sub><b>Shaun</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/pjaincertinia2025">
+<img src="https://avatars.githubusercontent.com/pjaincertinia2025" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Pragati"/><br />
+<sub><b>Pragati</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/gkumarcertinia">
+<img src="https://avatars.githubusercontent.com/gkumarcertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Govardhan"/><br />
+<sub><b>Govardhan</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/hdaulani">
+<img src="https://avatars.githubusercontent.com/hdaulani" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Hemant"/><br />
+<sub><b>Hemant</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/adawercertinia">
+<img src="https://avatars.githubusercontent.com/adawercertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Abhishek"/><br />
+<sub><b>Abhishek</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/dsinghcertinia">
+<img src="https://avatars.githubusercontent.com/dsinghcertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Dheeraj"/><br />
+<sub><b>Dheeraj</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/ssonicertinia">
+<img src="https://avatars.githubusercontent.com/ssonicertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Shivam"/><br />
+<sub><b>Shivam</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/ajaincertinia">
+<img src="https://avatars.githubusercontent.com/ajaincertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Anant"/><br />
+<sub><b>Anant</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/sgulyanicertinia">
+<img src="https://avatars.githubusercontent.com/sgulyanicertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Saijal"/><br />
+<sub><b>Saijal</b></sub> </a>
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="https://github.com/pswamicertinia">
+<img src="https://avatars.githubusercontent.com/pswamicertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Pawan"/><br />
+<sub><b>Pawan</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/nbhatiacertinia">
+<img src="https://avatars.githubusercontent.com/nbhatiacertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Nikhil"/><br />
+<sub><b>Nikhil</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/manojkumar2019">
+<img src="https://avatars.githubusercontent.com/manojkumar2019" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Manoj"/><br />
+<sub><b>Manoj</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/B1naryVision">
+<img src="https://avatars.githubusercontent.com/B1naryVision" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Hal"/><br />
+<sub><b>Hal</b></sub> </a>
+</td>
+<td align="center">
+<a href="https://github.com/mamorriscertinia">
+<img src="https://avatars.githubusercontent.com/mamorriscertinia" width="80" style="border-radius: 50%; border: 1px solid #ccc; object-fit: cover;" alt="Matthew"/><br />
+<sub><b>Matthew</b></sub> </a>
+</td>
+</tr>
+</table>
