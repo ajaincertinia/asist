@@ -2,7 +2,6 @@
 <img height="200px" src="https://raw.githubusercontent.com/certinia/asist/main/images/logo.svg" alt="ASIST logo">
 </div>
 
-# ASIST (Automated Security Issue Scanning Tool)
 [![Go Reference](https://pkg.go.dev/badge/github.com/certinia/asist.svg)](https://pkg.go.dev/github.com/certinia/asist)
 [![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://opensource.org/license/bsd-3-clause)
 
