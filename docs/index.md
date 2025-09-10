@@ -1,5 +1,5 @@
 <div align="center">
-<img height="200px" src="../images/logo.svg" alt="ASIST logo">
+<img height="200px" src="https://raw.githubusercontent.com/certinia/asist/main/images/logo.svg" alt="ASIST logo">
 </div>
 
 # ASIST (Automated Security Issue Scanning Tool)
@@ -16,7 +16,7 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 - 👾 32 rules covering XSS, Sharing clauses, hardcoded secrets, and some more obscure pitfalls, all aligned with Salesforce security best practices
 - 🖋️ Supports custom regex rules in config and standard rule overrides
 - ✅ False positive management with comments or annotations
-- ⚙️ VSCode extension for scanning as you code! See the [extension README](../extension/README.md) for more details
+- ⚙️ VSCode extension for scanning as you code! See the [extension README](https://github.com/certinia/asist/blob/main/extension/README.md) for more details
 - 💻 Multi-platform, multi-architecture (tested on Mac Intel, Mac Silicon, Windows, and Linux)
 - 🚫 Respects .gitignore and .forceignore by default
 - 🧩 YAML or JSON config, and JSON output for programmatic processing 😎
@@ -25,11 +25,11 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 
 ## ▶️ VSCode extension demo
 
-![ASIST scan via Extension](../images/scan-using-extension.gif)
+![ASIST scan via Extension](https://raw.githubusercontent.com/certinia/asist/main/images/scan-using-extension.gif)
 
 ## ▶️ CLI demo
 
-![ASIST scan via CLI](../images/scan-using-cli.gif)
+![ASIST scan via CLI](https://raw.githubusercontent.com/certinia/asist/main/images/scan-using-cli.gif)
 
 ## 📥 Installing
 
@@ -46,7 +46,7 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 
 Search for ASIST on the VSCode marketplace.
 
-See [extensions](extension) for usage
+See [extensions](https://github.com/certinia/asist/tree/main/extension) for usage
 
 ### Build from source
 
@@ -208,7 +208,7 @@ Within the config file, you can:
 * Add custom regex rules
 * Define rules to be run in CI/CD mode
 
-See our [example config file](../.asist.example.yaml) for a walkthrough of all config options.
+See our [example config file](https://github.com/certinia/asist/blob/main/.asist.example.yaml) for a walkthrough of all config options.
 
 ### 🔧 Customizing Standard rules
 
@@ -276,7 +276,7 @@ _**Note**: Nested false positive tags are not supported._
 
 While using ASIST Extension, hover over the occurrence and click on `Quick fix...` option, and select `Mark False positive`:
 
-  ![Marking false positive using Extension](../images/marking-false-positives.gif)
+  ![Marking false positive using Extension](https://raw.githubusercontent.com/certinia/asist/main/images/marking-false-positives.gif)
 
 # 🔁 CI/CD mode
 
