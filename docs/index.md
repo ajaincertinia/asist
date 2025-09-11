@@ -15,7 +15,7 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 - 👾 32 rules covering XSS, Sharing clauses, hardcoded secrets, and some more obscure pitfalls, all aligned with Salesforce security best practices
 - 🖋️ Supports custom regex rules in config and standard rule overrides
 - ✅ False positive management with comments or annotations
-- ⚙️ VSCode extension for scanning as you code! See the [extension README](https://github.com/certinia/asist/blob/main/extension/README.md) for more details
+- ⚙️ VSCode extension for scanning as you code! See the [extension README](#vs-code-extension) for more details
 - 💻 Multi-platform, multi-architecture (tested on Mac Intel, Mac Silicon, Windows, and Linux)
 - 🚫 Respects .gitignore and .forceignore by default
 - 🧩 YAML or JSON config, and JSON output for programmatic processing 😎
@@ -41,11 +41,9 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 
 1. Run `go install github.com/certinia/asist`
 
-### Installing the VSCode extension
+### As VSCode extension
 
-Search for ASIST on the VSCode marketplace.
-
-See [extensions](https://github.com/certinia/asist/tree/main/extension) for usage
+See [installing VS Code extension](#installing-the-vscode-extension)
 
 ### Build from source
 
@@ -271,12 +269,6 @@ In any other file types, the user must figure out the more appropriate way to in
 
 _**Note**: Nested false positive tags are not supported._
 
-### 🔌 Using the Extension to mark false positives
-
-While using ASIST Extension, hover over the occurrence and click on `Quick fix...` option, and select `Mark False positive`:
-
-  ![Marking false positive using Extension](https://raw.githubusercontent.com/certinia/asist/main/images/marking-false-positives.gif)
-
 # 🔁 CI/CD mode
 
 CI/CD mode is enabled using the `-j` flag:
@@ -365,3 +357,53 @@ By default, ASIST will ignore files and folders defined inside .gitignore and .f
 | 1         | ASIST executed successfully with findings                |
 | 3         | ASIST failed due to internal error (file a bug report!)  |
 | 4         | ASIST failed due to user error (review input and config) |
+
+# VS Code Extension
+
+Using the VSCode extension is by far the easiest way to get started with ASIST.
+When a file is opened or saved, ASIST will scan it to identify vulnerabilities.
+
+Just like a linter, once the scan is complete, ASIST will annotate your code with the findings and the rule description. Findings can also be found in the "Problems" tab.
+
+Workspace scans are also supported, making it easy to run ASIST on an entire project and address all your issues on the fly!
+
+## 📦 Installation
+
+The extension is available on the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=financialforce.asist).
+
+## ⚡ Extension commands
+
+ASIST commands can be run in VSCode by pressing `Ctrl+Shift+P` and typing `ASIST` to get the list of available commands.
+Note that some commands will print results to the "Output" tab in VSCode (select `ASIST` in the channel dropdown).
+
+![ASIST Extension commands](https://raw.githubusercontent.com/certinia/asist/main/extension/image-1.png)
+
+- **Run on file:** Runs a scan on the current opened file.
+- **Run on workspace:** Runs a scan on the current project workspace.
+- **List enabled rules:** Outputs a list of all the current enabled rules.
+- **Create config file:** Creates a configuration file template if it doesn't exist.
+- **Edit config file:** Opens the configuration file with custom rules, if it exists.
+- **Preferences:** Opens the extension settings.
+
+## 🔕 Marking false positives
+
+While using ASIST Extension, hover over the occurrence and click on `Quick fix...` option, and select `Mark False positive`, This will add the placeholder `asist-ignore-begin` and `asist-ignore-end` comments around the affected line, and fill in the relevant rule ID.
+
+  ![Marking false positive using Extension](https://raw.githubusercontent.com/certinia/asist/main/images/marking-false-positives.gif)
+
+## 🛠️ Configuration file
+
+For the VSCode extension to pick up your config file automatically, the file must to be named either `.asist.yaml` or `.asist.json`, and must be located at the root of the workspace.
+
+You can create a configuration file using the `Create config file` command, which produces a self-documented template.
+
+By default, ASIST looks for a config file in the root of the VSCode workspace, but if you like, you can specify a specific config file path (relative to the workspace) in the extension preferences instead -- this can be useful when working with monorepos.
+
+## 👾 Use a custom binary
+
+This extension is shipped with prebuilt ASIST binaries, but if you need to specify a specific ASIST scanner location (which is very useful for developing new features!), here's how:
+
+1. Open the ASIST `Extension settings`
+1. Navigate to the `Workspace` tab
+2. Enable the `Custom Binary Enabled` setting
+3. Provide the path to your ASIST binary in `Custom Binary Path`
