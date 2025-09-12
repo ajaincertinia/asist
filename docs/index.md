@@ -1,11 +1,11 @@
 <div align="center">
-<img height="200px" src="https://raw.githubusercontent.com/certinia/asist/main/images/logo.svg" alt="ASIST logo">
+  <a href="https://github.com/certinia/asist"><img height="200px" src="https://raw.githubusercontent.com/certinia/asist/main/images/logo.svg" alt="ASIST logo"></a>
 </div>
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/certinia/asist.svg)](https://pkg.go.dev/github.com/certinia/asist)
 [![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-blue)](https://opensource.org/license/bsd-3-clause)
 
-ASIST is a regex-based, blazing-fast Static Application Security Testing (SAST) tool for securing Salesforce apps at developer speed. 
+[ASIST](https://github.com/certinia/asist) is a regex-based, blazing-fast Static Application Security Testing (SAST) tool for securing Salesforce apps at developer speed.
 
 Originally built for internal use at Certinia to support Security Reviews, we have now decided to release it to the community 🌍
 
@@ -15,7 +15,7 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 - 👾 32 rules covering XSS, Sharing clauses, hardcoded secrets, and some more obscure pitfalls, all aligned with Salesforce security best practices
 - 🖋️ Supports custom regex rules in config and standard rule overrides
 - ✅ False positive management with comments or annotations
-- ⚙️ VSCode extension for scanning as you code! See the [extension README](#vs-code-extension) for more details
+- ⚙️ VSCode extension for scanning as you code! See the [extension](#vs-code-extension) for more details
 - 💻 Multi-platform, multi-architecture (tested on Mac Intel, Mac Silicon, Windows, and Linux)
 - 🚫 Respects .gitignore and .forceignore by default
 - 🧩 YAML or JSON config, and JSON output for programmatic processing 😎
@@ -358,7 +358,7 @@ By default, ASIST will ignore files and folders defined inside .gitignore and .f
 | 3         | ASIST failed due to internal error (file a bug report!)  |
 | 4         | ASIST failed due to user error (review input and config) |
 
-# VS Code Extension
+# 🧩 VS Code Extension
 
 Using the VSCode extension is by far the easiest way to get started with ASIST.
 When a file is opened or saved, ASIST will scan it to identify vulnerabilities.
