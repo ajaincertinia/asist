@@ -15,7 +15,7 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 - 👾 32 rules covering XSS, Sharing clauses, hardcoded secrets, and some more obscure pitfalls, all aligned with Salesforce security best practices
 - 🖋️ Supports custom regex rules in config and standard rule overrides
 - ✅ False positive management with comments or annotations
-- ⚙️ VSCode extension for scanning as you code! See the [extension](#vs-code-extension) for more details
+- ⚙️ VSCode extension for scanning as you code! See the [extension](#-vs-code-extension) for more details
 - 💻 Multi-platform, multi-architecture (tested on Mac Intel, Mac Silicon, Windows, and Linux)
 - 🚫 Respects .gitignore and .forceignore by default
 - 🧩 YAML or JSON config, and JSON output for programmatic processing 😎
@@ -43,7 +43,7 @@ Originally built for internal use at Certinia to support Security Reviews, we ha
 
 ### As VSCode extension
 
-See [installing VS Code extension](#installing-the-vscode-extension)
+See [installing VS Code extension](#-installation)
 
 ### Build from source
 
